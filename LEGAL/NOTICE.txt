@@ -22,5 +22,12 @@ Virtual Robot, Copyright 2019 Team Beta
 
    Javassist software (Copyright 1999-2019, Shigeru Chiba), Licensed under Apache License, Version 2.0
 
+   RoadRunner software (Copyright 2018, ACME Robotics), Licensed under MIT License
+
+   Select Files from TeamCode Module of RoadRunner-QuickStart project (Copyright 2018, ACME Robotics); the TeamCode
+        Module is licensed under MIT License
+
+   Apache Commons Math Library (Copyright 2001-2013 The Apache Software Foundation), Licensed under Apache License, Version 2.0
+
 
 

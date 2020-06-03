@@ -1,10 +1,13 @@
-# A 2D simulator to help beginning Java programmers learn to program for FTC Robotics.
+# A 2D simulator to help learn FTC Robotics programming with ACME Robotics Road-Runner Core Library added.
 
 ![](/readme_image.JPG)
 
-**Note: a Physics-based 3D version is now available here:** [vr_physics](https://github.com/Beta8397/vr_physics).
-But, JavaFX 3D Scenes are not supported by all hardware platforms, so the 3D version may or may not work on
-your system.
+This is the virtual_robot simulator with added support for the ACME Robotics RoadRunner Core Library (v. 0.5.1). Note
+that the ACME Robotics FTC Dashboard is NOT included. A simple spline-driving example op mode (DriveSplineRegular) is
+provided (see the org.firstinspires.simple_rr_example package). In addition, several example op modes from the ACME
+RoadRunner-Quickstart project are provided: LocalizationTest, SplineTest, StraightTest, TrackWidthTuner, and TurnTest.
+These have been modified to make them compatible with the simulator, and can be found in the
+rr_quickstart_examples package (and subpackages).
 
 This is a JavaFX application developed using the (free) IntelliJ IDEA Community Edition IDE. The repository can be downloaded
 and unzipped, then opened with IntelliJ.
