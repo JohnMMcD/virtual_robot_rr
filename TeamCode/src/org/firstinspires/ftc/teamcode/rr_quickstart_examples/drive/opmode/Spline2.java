@@ -47,7 +47,7 @@ public class Spline2 extends LinearOpMode {
         sleep(1000);
 
         Trajectory trajBackThatUp = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                .splineTo(new Vector2d(10, 6), Math.toRadians(90))
+                .splineTo(new Vector2d(15, 6), Math.toRadians(90))
                 .build();
 
         drive.followTrajectory(trajBackThatUp);
@@ -57,7 +57,7 @@ public class Spline2 extends LinearOpMode {
         sleep(1000);
 
         Trajectory trajGetToTheCorner = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                .splineTo(new Vector2d(5, 24), Math.toRadians(90))
+                .splineTo(new Vector2d(10, 17), Math.toRadians(90))
                 .build();
 
         drive.followTrajectory(trajGetToTheCorner);
@@ -67,7 +67,7 @@ public class Spline2 extends LinearOpMode {
         sleep(1000);
 
         Trajectory trajGoCenterLine = new TrajectoryBuilder(new Pose2d(), drive.constraints)
-                .splineTo(new Vector2d(2, -40), Math.toRadians(270))
+                .splineTo(new Vector2d(2, -40), Math.toRadians(285))
                 .build();
 
         drive.followTrajectory(trajGoCenterLine);
