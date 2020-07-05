@@ -15,7 +15,7 @@ public class Config {
     /**
      * Whether to use "Virtual Gamepad" (true -> Virtual gamepad, false -> Real gamepad)
      */
-    public static final boolean USE_VIRTUAL_GAMEPAD = true; // JMM set to true
+    public static final boolean USE_VIRTUAL_GAMEPAD = true; // JMM set to true 2020-07-05
 
     /**
      * The image object for the field.
