@@ -26,6 +26,7 @@ import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
 import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
@@ -41,15 +42,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import org.jetbrains.annotations.NotNull;
 //import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 //import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 //import org.firstinspires.ftc.teamcode.util.DashboardUtil;
 //import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.firstinspires.ftc.teamcode.rr_quickstart_examples.drive.DriveConstants.BASE_CONSTRAINTS;
 import static org.firstinspires.ftc.teamcode.rr_quickstart_examples.drive.DriveConstants.RUN_USING_ENCODER;
@@ -92,6 +92,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     private List<Pose2d> poseHistory;
 
     private DcMotor leftFront, leftRear, rightRear, rightFront;
+    private DcMotor encLeft, encRight, encX;
     private List<DcMotor> motors;
     private BNO055IMU imu;
 
@@ -137,6 +138,10 @@ public class SampleMecanumDrive extends MecanumDrive {
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
+        encLeft = hardwareMap.get(DcMotor.class, "enc_left");
+        encRight = hardwareMap.get(DcMotor.class, "enc_right");
+        encX = hardwareMap.get(DcMotor.class, "enc_x");
+
 //        for (DcMotorEx motor : motors) {
 //            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
 //            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
@@ -159,6 +164,21 @@ public class SampleMecanumDrive extends MecanumDrive {
 
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
+        List<Pose2d> trackingWheelPoses = new ArrayList<Pose2d>(
+                Arrays.asList(new Pose2d[] {new Pose2d(0, -6, 0), new Pose2d(0, 6, Math.PI),
+                new Pose2d(0, 0, Math.PI/2)}));
+
+        setLocalizer(new ThreeTrackingWheelLocalizer(trackingWheelPoses) {
+            @NotNull
+            @Override
+            public List<Double> getWheelPositions() {
+                List<Double> result = new ArrayList<Double>();
+                result.add(encRight.getCurrentPosition() * 2.0 * Math.PI / 1120.0);
+                result.add(encLeft.getCurrentPosition() * 2.0 * Math.PI / 1120.0);
+                result.add(encX.getCurrentPosition() * 2.0 * Math.PI / 1120.0);
+                return result;
+            }
+        });
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
@@ -300,6 +320,11 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     public void waitForIdle() {
         while (!Thread.currentThread().isInterrupted() && isBusy()) {
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException ex){
+                break;
+            }
             update();
         }
     }
