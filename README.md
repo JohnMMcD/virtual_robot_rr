@@ -12,9 +12,10 @@ rr_quickstart_examples package (and subpackages).
 This is a JavaFX application developed using the (free) IntelliJ IDEA Community Edition IDE. The repository can be downloaded
 and unzipped, then opened with IntelliJ.
 
-Four robot configurations are available: a simple two-wheeled robot, a robot with four mecanum wheels, an
-X-Drive robot with four OmniWheels mounted at 45 degrees at each corner of the robot, and an additional
-mecanum-wheeled configuration that has an extendable arm with a grabber at the end.
+Five robot configurations are available: a simple two-wheeled robot, a robot with four mecanum wheels, an
+X-Drive robot with four OmniWheels mounted at 45 degrees at each corner of the robot, a mecanum-wheeled 
+configuration that has an extendable arm with a grabber at the end, and a mecanum-wheeled bot with three
+"dead-wheel" encoders for localization.
 
 Each robot can be thought of as 18 inches wide.  For the two-wheel bot and mecanum wheel bot, the distance between
 the centers of the right and left wheels is 16 inches. For the mecanum wheel bot, the distance between the centers
@@ -24,7 +25,10 @@ encoder. There is a downward-facing color sensor in the center of the robot. A g
 The ArmBot has an extendable arm (DcMotor operated) with a grabber (Servo-operated) at the end. The other robots
 have a simple rotating arm at the back. For the Mechanum bot and Two-Wheeled bot, the arm is controlled by a servo.
 For the X-Drive bot, the arm is controlled by a CR servo. Each robot also has distance sensors on the front, left, right
-and back sides. A small green rectangle indicates the front of the robot. Wheel diameters are all 4 inches.
+and back sides. A small green rectangle indicates the front of the robot. Wheel diameters are all 4 inches. For
+the robot with dead-wheel encoders, the forward-reverse dead wheels are located 6 inches to the right and left of 
+the center, and the X-direction (i.e. right-left) dead-wheel is located at the center of the robot. The dead wheels are
+two inches in diameter.
 
 The field can be thought of as 12 feet wide. The field graphic (currently the Skystone field)
 is obtained from a bitmap (.bmp) image. The color sensor detects the field color beneath the center of the
@@ -74,6 +78,12 @@ To use:
 
 
 LOG OF CHANGES
+
+CHANGES 7/25/2020
+    Added a robot configuration ("Encoder Bot") with three dead-wheel encoders. The RoadRunner quickstart examples 
+    have been modified to use these encoders for localization. The DriveSplineRegular op mode (in the 
+    simple_rr_example package) still uses the drive-wheel encoders for localization. Added triggers, d_pad,
+    and bumpers to the virtual gamepad.
 
 CHANGES 12/16/2019
     Further changes to facilitate creation of new robot configurations. The robot configuration classes (e.g., 
