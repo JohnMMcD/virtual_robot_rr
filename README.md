@@ -27,7 +27,8 @@ have a simple rotating arm at the back. For the Mechanum bot and Two-Wheeled bot
 For the X-Drive bot, the arm is controlled by a CR servo. Each robot also has distance sensors on the front, left, right
 and back sides. A small green rectangle indicates the front of the robot. Wheel diameters are all 4 inches. For
 the robot with dead-wheel encoders, the forward-reverse dead wheels are located 6 inches to the right and left of 
-the center, and the X-direction (i.e. right-left) dead-wheel is located at the center of the robot.
+the center, and the X-direction (i.e. right-left) dead-wheel is located at the center of the robot. The dead wheels are
+two inches in diameter.
 
 The field can be thought of as 12 feet wide. The field graphic (currently the Skystone field)
 is obtained from a bitmap (.bmp) image. The color sensor detects the field color beneath the center of the
