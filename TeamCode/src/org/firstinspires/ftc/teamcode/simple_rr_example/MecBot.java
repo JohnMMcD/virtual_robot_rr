@@ -16,6 +16,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A simple mecanum bot class for use with Acme Robotics RoadRunner. This class uses the mecanum drive wheels for
+ * odometry (localization).
+ */
 public class MecBot extends MecanumDrive {
 
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(1, 0, 0);

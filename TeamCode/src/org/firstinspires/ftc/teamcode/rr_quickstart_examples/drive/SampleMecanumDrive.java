@@ -61,7 +61,9 @@ import static org.firstinspires.ftc.teamcode.rr_quickstart_examples.drive.DriveC
 
 
 /*
- * Simple mecanum drive hardware implementation for REV hardware.
+ * Simple mecanum drive hardware implementation for REV hardware, for use with Acme Robotics RoadRunner.
+ * This class uses three dead-wheel encoders for localization.
+ *
  */
 //@Config
 public class SampleMecanumDrive extends MecanumDrive {
@@ -162,12 +164,16 @@ public class SampleMecanumDrive extends MecanumDrive {
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        // TODO: if desired, use setLocalizer() to change the localization method
-        // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
+        //Set-Up to use the Dead-Wheel encoders for localization, with RoadRunner's ThreeTrackingWheelLocalizer
+        //First, create a list containing the poses (x,y,angle) of the three tracking wheels on the robot
+        //The order of these is: RIGHT, LEFT, CENTER.
         List<Pose2d> trackingWheelPoses = new ArrayList<Pose2d>(
                 Arrays.asList(new Pose2d[] {new Pose2d(0, -6, 0), new Pose2d(0, 6, Math.PI),
                 new Pose2d(0, 0, Math.PI/2)}));
 
+        //Next, set the localizer for this MecanumDrive object, using the list of tracking wheel poses,
+        //and overriding the getWheelPositions method to return the positions (in inches) of each of
+        //the three tracking wheels
         setLocalizer(new ThreeTrackingWheelLocalizer(trackingWheelPoses) {
             @NotNull
             @Override
