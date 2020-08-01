@@ -31,6 +31,16 @@ public class TwoWheelDemoLinear extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
+            backServo.setPosition(0.5 - 0.5* gamepad1.left_stick_y);
+            telemetry.addData("Press", "Y-fwd, A-rev, B-Rt, X-Lt");
+            telemetry.addData("Left Gamepad stick controls back servo","");
+            telemetry.addData("Color","R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
+            telemetry.addData("Heading"," %.1f", gyro.getHeading());
+            telemetry.addData("Encoders","Left %d  Right %d", left.getCurrentPosition(), right.getCurrentPosition());
+            telemetry.addData("Distance", " Fr %.1f  Lt %.1f  Rt %.1f  Bk %.1f  ",
+                    frontDistance.getDistance(DistanceUnit.CM), leftDistance.getDistance(DistanceUnit.CM),
+                    rightDistance.getDistance(DistanceUnit.CM), backDistance.getDistance(DistanceUnit.CM)
+            );
             if (gamepad1.a){
                 telemetry.addData("a pressed","");
                 left.setPower(-.5);
@@ -51,16 +61,6 @@ public class TwoWheelDemoLinear extends LinearOpMode {
                 left.setPower(0);
                 right.setPower(0);
             }
-            backServo.setPosition(0.5 - 0.5* gamepad1.left_stick_y);
-            telemetry.addData("Press", "Y-fwd, A-rev, B-Rt, X-Lt");
-            telemetry.addData("Left Gamepad stick controls back servo","");
-            telemetry.addData("Color","R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
-            telemetry.addData("Heading"," %.1f", gyro.getHeading());
-            telemetry.addData("Encoders","Left %d  Right %d", left.getCurrentPosition(), right.getCurrentPosition());
-            telemetry.addData("Distance", " Fr %.1f  Lt %.1f  Rt %.1f  Bk %.1f  ",
-                    frontDistance.getDistance(DistanceUnit.CM), leftDistance.getDistance(DistanceUnit.CM),
-                    rightDistance.getDistance(DistanceUnit.CM), backDistance.getDistance(DistanceUnit.CM)
-                    );
             telemetry.update();
         }
         left.setPower(0);
