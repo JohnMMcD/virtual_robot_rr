@@ -43,14 +43,28 @@ public class _7026TimothyT_Sensor_Autonomous_try4 extends LinearOpMode {
       left.setPower(0.4);
       right.setPower(0.4);
     }
-    // Back up after hitting wal
+    // Back up after hitting wall
     left.setPower(-0.5);
     right.setPower(-0.5);
     sleep(333);
+
+    // JMM added stop and check for button press
+    while (!gamepad1.b && opModeIsActive()) {
+      left.setPower(0);
+      right.setPower(0);
+    }
+
     // Turn left  appx 90 degrees- OK
     left.setPower(-0.5);
     right.setPower(0.5);
-    sleep(1000);
+    sleep(850); // JMM decreased from 1000 due to slight overshoot
+
+    // JMM added stop and check for button press
+    while (!gamepad1.b && opModeIsActive()) {
+        left.setPower(0);
+        right.setPower(0);
+    }
+
     // Go forward until the red line
     left.setPower(0.3);
     right.setPower(0.3);
@@ -61,29 +75,71 @@ public class _7026TimothyT_Sensor_Autonomous_try4 extends LinearOpMode {
       right.setPower(0.3);
 //      CurrentColor = Color.argb(color1.alpha(), color1.red(), color1.green(), color1.blue());
     }
+
+    // JMM added stop and check for button press
+    while (!gamepad1.b && opModeIsActive()) {
+        left.setPower(0);
+        right.setPower(0);
+    }
+
     // Red has been reached, start turning
     left.setPower(0.5);
     right.setPower(-0.5);
     sleep(1600);
+
+  // JMM added stop and check for button press
+  while (!gamepad1.b && opModeIsActive()) {
+      left.setPower(0);
+      right.setPower(0);
+  }
+
+    // advance forward and hit the block
     while (!touch1.isPressed(gamepad1)) {
       left.setPower(0.4);
       right.setPower(0.4);
     }
+
+      // JMM added stop and check for button press
+      while (!gamepad1.b && opModeIsActive()) {
+          left.setPower(0);
+          right.setPower(0);
+      }
+
     left.setPower(-1);
     right.setPower(-1);
     sleep(500);
+
+      // JMM added stop and check for button press
+      while (!gamepad1.b && opModeIsActive()) {
+          left.setPower(0);
+          right.setPower(0);
+      }
+
     left.setPower(-0.5);
     right.setPower(0.5);
     sleep(2000);
+
+      // JMM added stop and check for button press
+      while (!gamepad1.b && opModeIsActive()) {
+          left.setPower(0);
+          right.setPower(0);
+      }
+
     while (!touch1.isPressed(gamepad1)) {
-      left.setPower(0.1);
-      right.setPower(0.1);
+        left.setPower(0.1);
+        right.setPower(0.1);
     }
+
+      // JMM added stop and check for button press
+      while (!gamepad1.b && opModeIsActive()) {
+          left.setPower(0);
+          right.setPower(0);
+      }
     // CurrentColor = Color.argb(color1.alpha(), color1.red(), color1.green(), color1.blue());
     // JMM: Back up towards red
     while (!isRed(color1)) {
-      left.setPower(-0.2);
-      right.setPower(-0.2);
+        left.setPower(-0.2);
+        right.setPower(-0.2);
 //      CurrentColor = Color.argb(color1.alpha(), color1.red(), color1.green(), color1.blue());
     }
     left.setPower(0);
@@ -92,11 +148,11 @@ public class _7026TimothyT_Sensor_Autonomous_try4 extends LinearOpMode {
 
   private boolean isRed(ColorSensor colorSensor)
   {
-    return colorSensor.red() > RED_LINE_DETECTION;
+      return colorSensor.red() > 135 && colorSensor.green() < 95;
   }
 
   private boolean isBlue(ColorSensor colorSensor)
   {
-    return colorSensor.blue() > BLUE_LINE_DETECTION;
+      return colorSensor.red() < 70 && colorSensor.blue() > 160;
   }
 }
