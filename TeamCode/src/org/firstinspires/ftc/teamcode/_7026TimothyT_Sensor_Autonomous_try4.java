@@ -27,11 +27,11 @@ public class _7026TimothyT_Sensor_Autonomous_try4 extends LinearOpMode {
   public void runOpMode() {
 //    int CurrentColor;
 
-    left = hardwareMap.dcMotor.get("left");
+    left = hardwareMap.dcMotor.get("left_motor");
 //    touch1 = hardwareMap.touchSensor.get("touch1");
     touch1 = new TouchSensor();
-    right = hardwareMap.dcMotor.get("right");
-    color1 = hardwareMap.colorSensor.get("color1");
+    right = hardwareMap.dcMotor.get("right_motor");
+    color1 = hardwareMap.colorSensor.get("color_sensor");
 
     // Put initialization blocks here.
     waitForStart();
