@@ -35,6 +35,11 @@ public class TwoWheelDemoLinear extends LinearOpMode {
             telemetry.addData("Press", "Y-fwd, A-rev, B-Rt, X-Lt");
             telemetry.addData("Left Gamepad stick controls back servo","");
             telemetry.addData("Color","R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
+            // TODO: determine a way to get the hue value;
+            //  file:///C:/Users/jomcdonn.ORADEV/personal/FTC/SDK/Team5873SkyStone/doc/javadoc/com/qualcomm/robotcore/hardware/ColorSensor.html#argb-- doesn't have
+            //  an argb method, even though the doc says it does
+            //            telemetry.addData("HSV","H %d", colorSensor.argb());
+
             telemetry.addData("Heading"," %.1f", gyro.getHeading());
             telemetry.addData("Encoders","Left %d  Right %d", left.getCurrentPosition(), right.getCurrentPosition());
             telemetry.addData("Distance", " Fr %.1f  Lt %.1f  Rt %.1f  Bk %.1f  ",
