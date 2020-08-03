@@ -17,7 +17,7 @@ import virtual_robot.util.AngleUtils;
  * RangerBot is the controller class for the "ranger_bot.fxml" markup file. 
  * The RangerBot class is based on the Two Wheel Bot class. It has not been fully updated.
  */
-@BotConfig(name = "Ranger Bot", filename = "ranger_bot")
+@BotConfig(name = "_Ranger Bot", filename = "ranger_bot")
 public class RangerBot extends VirtualBot {
 
     private MotorType motorType;
@@ -33,6 +33,11 @@ public class RangerBot extends VirtualBot {
 
     private double wheelCircumference;
     private double interWheelDistance;
+    private double robotLength;
+    private double halfRobotLength;
+    private double tau;
+    private double wheelDiameter;
+    private double wheelRadius;
 
     public RangerBot(){
         super();
@@ -47,9 +52,19 @@ public class RangerBot extends VirtualBot {
         gyro = (GyroSensorImpl)hardwareMap.gyroSensor.get("gyro_sensor");
         colorSensor = (VirtualRobotController.ColorSensorImpl)hardwareMap.colorSensor.get("color_sensor");
         servo = (ServoImpl)hardwareMap.servo.get("back_servo");
-        /* TODO: Update with values from RangerBot */
-        wheelCircumference = Math.PI * botWidth / 4.5;
-        interWheelDistance = botWidth * 8.0 / 9.0;
+// Original values
+//        wheelCircumference = Math.PI * botWidth / 4.5;
+//        interWheelDistance = botWidth * 8.0 / 9.0;
+
+        /* Updated with values from RangerBot */
+        tau = Math.PI * 2.0;
+        wheelDiameter = 3.0;
+        wheelRadius = wheelDiameter / 2;
+        wheelCircumference = tau * wheelRadius;
+        interWheelDistance = 8.0;
+
+        robotLength = 10.0;
+        halfRobotLength = robotLength / 2.0;
     }
 
     public void initialize(){
@@ -70,9 +85,9 @@ public class RangerBot extends VirtualBot {
 
     /** TODO: Update with values from RangerBot */
     public synchronized void updateStateAndSensors(double millis){
-        double deltaLeftPos = leftMotor.update(millis);
+        double deltaLeftPos = -leftMotor.update(millis); // negative because left motor is reversed due to it being on the opposite side of the robot. I think.
         double deltaRightPos = rightMotor.update(millis);
-        double leftWheelDist = -deltaLeftPos * wheelCircumference / motorType.TICKS_PER_ROTATION;
+        double leftWheelDist = deltaLeftPos * wheelCircumference / motorType.TICKS_PER_ROTATION;
         double rightWheelDist = deltaRightPos * wheelCircumference / motorType.TICKS_PER_ROTATION;
         double distTraveled = (leftWheelDist + rightWheelDist) / 2.0;
         
@@ -86,13 +101,15 @@ public class RangerBot extends VirtualBot {
         if (y > (halfFieldWidth - halfBotWidth)) y = halfFieldWidth - halfBotWidth;
         else if (y < (halfBotWidth - halfFieldWidth)) y = halfBotWidth - halfFieldWidth;
         headingRadians += headingChange;
-        if (headingRadians > Math.PI) headingRadians -= 2.0 * Math.PI;
-        else if (headingRadians < -Math.PI) headingRadians += 2.0 * Math.PI;
+        if (headingRadians > Math.PI) headingRadians -= tau;
+        else if (headingRadians < -Math.PI) headingRadians += tau;
         gyro.updateHeading(headingRadians * 180.0 / Math.PI);
-        colorSensor.updateColor(x, y);
-        final double piOver2 = Math.PI / 2.0;
+        // TODO: verify this
+        System.out.println(String.format("Color sensor: x:%.2f y:%.2f",x + Math.cos(headingRadians) * halfRobotLength, y + Math.sin(headingRadians) * halfRobotLength ));
+        colorSensor.updateColor(x + Math.cos(headingRadians) * halfRobotLength, y + Math.sin(headingRadians) * halfRobotLength);
+        final double tauOver4 = tau / 4.0;
         for (int i = 0; i<4; i++){
-            double sensorHeading = AngleUtils.normalizeRadians(headingRadians + i * piOver2);
+            double sensorHeading = AngleUtils.normalizeRadians(headingRadians + i * tauOver4);
             distanceSensors[i].updateDistance( x - halfBotWidth * Math.sin(sensorHeading),
                     y + halfBotWidth * Math.cos(sensorHeading), sensorHeading);
         }
