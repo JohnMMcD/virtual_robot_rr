@@ -104,9 +104,15 @@ public class RangerBot extends VirtualBot {
         if (headingRadians > Math.PI) headingRadians -= tau;
         else if (headingRadians < -Math.PI) headingRadians += tau;
         gyro.updateHeading(headingRadians * 180.0 / Math.PI);
-        // TODO: verify this
-        System.out.println(String.format("Color sensor: x:%.2f y:%.2f",x + Math.cos(headingRadians) * halfRobotLength, y + Math.sin(headingRadians) * halfRobotLength ));
-        colorSensor.updateColor(x + Math.cos(headingRadians) * halfRobotLength, y + Math.sin(headingRadians) * halfRobotLength);
+
+        // TODO: verify the color sensor reports the color underneath accurately
+        double colorX = x + (Math.cos(headingRadians) * halfRobotLength);
+        double colorY = y + (Math.sin(headingRadians) * halfRobotLength);
+        System.out.println(String.format("Color sensor checks: colorX:%.2f colorY:%.2f",colorX, colorY ));
+        colorSensor.updateColor(colorX, colorY);
+        // FIXME: Let's see what happens when you zero out the location of the color sensor
+        //colorSensor.updateColor(0,0);
+
         final double tauOver4 = tau / 4.0;
         for (int i = 0; i<4; i++){
             double sensorHeading = AngleUtils.normalizeRadians(headingRadians + i * tauOver4);
