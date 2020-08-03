@@ -21,12 +21,12 @@ import virtual_robot.util.AngleUtils;
 public class RangerBot extends VirtualBot {
 
     private MotorType motorType;
-    private DcMotorImpl leftMotor = null;
-    private DcMotorImpl rightMotor = null;
-    private GyroSensorImpl gyro = null;
-    private VirtualRobotController.ColorSensorImpl colorSensor = null;
-    private ServoImpl servo = null;
-    private VirtualRobotController.DistanceSensorImpl[] distanceSensors = null;
+    private DcMotorImpl leftMotor;
+    private DcMotorImpl rightMotor;
+    private GyroSensorImpl gyro;
+    private VirtualRobotController.ColorSensorImpl colorSensor;
+    private ServoImpl servo;
+    private VirtualRobotController.DistanceSensorImpl[] distanceSensors;
 
     //The backServoArm object is instantiated during loading via a fx:id property.
     @FXML Rectangle backServoArm;
@@ -63,7 +63,7 @@ public class RangerBot extends VirtualBot {
         wheelCircumference = tau * wheelRadius;
         interWheelDistance = 8.0;
 
-        robotLength = 10.0;
+        robotLength = 18.0; // Actual is 10 or so, but we're going to use 18 to get the color sensor in the apparent front of the bot
         halfRobotLength = robotLength / 2.0;
     }
 
@@ -85,13 +85,13 @@ public class RangerBot extends VirtualBot {
 
     /** TODO: Update with values from RangerBot */
     public synchronized void updateStateAndSensors(double millis){
-        double deltaLeftPos = -leftMotor.update(millis); // negative because left motor is reversed due to it being on the opposite side of the robot. I think.
+        double deltaLeftPos = leftMotor.update(millis);
         double deltaRightPos = rightMotor.update(millis);
-        double leftWheelDist = deltaLeftPos * wheelCircumference / motorType.TICKS_PER_ROTATION;
+        double leftWheelDist = -deltaLeftPos * wheelCircumference / motorType.TICKS_PER_ROTATION;
         double rightWheelDist = deltaRightPos * wheelCircumference / motorType.TICKS_PER_ROTATION;
         double distTraveled = (leftWheelDist + rightWheelDist) / 2.0;
         
-        double headingChange = (rightWheelDist - leftWheelDist) / interWheelDistance;
+        double headingChange = (rightWheelDist - leftWheelDist) / interWheelDistance; // Adjust for wheels in back of robot
         double deltaRobotX = -distTraveled * Math.sin(headingRadians + headingChange / 2.0);
         double deltaRobotY = distTraveled * Math.cos(headingRadians + headingChange / 2.0);
         x += deltaRobotX;
@@ -105,12 +105,18 @@ public class RangerBot extends VirtualBot {
         else if (headingRadians < -Math.PI) headingRadians += tau;
         gyro.updateHeading(headingRadians * 180.0 / Math.PI);
 
-        // TODO: verify the color sensor reports the color underneath accurately
-        double colorX = x + (Math.cos(headingRadians) * halfRobotLength);
-        double colorY = y + (Math.sin(headingRadians) * halfRobotLength);
-        System.out.println(String.format("Color sensor checks: colorX:%.2f colorY:%.2f",colorX, colorY ));
+        // The X,Y origin is in the center of the field with positive X in the direction of the red alliance
+        // and positive Y in the direction of the scoring table.
+        // The heading is 0 degrees in the default orientation. As the robot rotates a half turn, the heading
+        // increases to up to pi (tau/2) radians, then when it crosses a half-turn it flips to negative pi (tau/2) radians.
+        // The color sensor is mounted at the edge of the robot. In the default orientation, the
+        // color sensor is mounted on the edge closest to the scoring table.
+        // TODO: Determine why the color sensor seems to always report the value under the center of the robot
+        double colorX = x - (Math.sin(headingRadians) * halfRobotLength);
+        double colorY = y + (Math.cos(headingRadians) * halfRobotLength);
+        System.out.println(String.format("Debug: x: %.2f y:%.2f colorX:%.2f colorY:%.2f Heading:%.2f", x, y, colorX, colorY, headingRadians));
         colorSensor.updateColor(colorX, colorY);
-        // FIXME: Let's see what happens when you zero out the location of the color sensor
+        // When you zero out the location of the color sensor, the color value never changes
         //colorSensor.updateColor(0,0);
 
         final double tauOver4 = tau / 4.0;
