@@ -105,8 +105,8 @@ public class _7026TimothyT_Sensor_Autonomous_try4 extends LinearOpMode {
         right.setPower(0);
     }
     // back up after hitting the block
-    left.setPower(-1);
-    right.setPower(-1);
+    left.setPower(-.4);
+    right.setPower(-4);
     sleep(500);
 
     // JMM added stop and check for button press
