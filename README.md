@@ -1,3 +1,6 @@
+# Forked from https://github.com/Beta8397/virtual_robot_rr . No significant changes were done by me (John M).
+
+
 # A 2D simulator to help learn FTC Robotics programming with ACME Robotics Road-Runner Core Library added.
 
 ![](/readme_image.JPG)
